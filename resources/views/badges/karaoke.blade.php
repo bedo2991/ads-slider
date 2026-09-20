@@ -1,0 +1,1 @@
+<span class="badge text-bg-info"><i class="fas fa-fw  fa-microphone"></i>&nbsp;{{__('Karaoke')}}</span>

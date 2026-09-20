@@ -1,0 +1,1 @@
+<span class="badge text-bg-warning"><i class="fas fa-fw fa-bell-slash"></i>&nbsp;{{__('No final round')}}</span>

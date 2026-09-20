@@ -1,0 +1,110 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "id": "https://slider.fbedo.work/schemas/1",
+    "type": "object",
+    "properties": {
+      "generated_on": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "events": {
+        "type": "array",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "import_id": {
+                "description": "A unique ID for this event",
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "description": "The name of the event",
+                "type": "string",
+                "maxLength": 191
+              },
+              "start": {
+                "description": "The day when the event starts, in the yyyy-mm-dd format",
+                "type": "string",
+                "format": "date",
+                "minLength": 10,
+                "maxLength": 10
+              },
+              "start_time": {
+                "description": "The time when the event starts, in the hh:mm:ss format",
+                "type": "string",
+                "format": "time"
+              },
+              "end": {
+                "description": "The day when the event ends, in the yyyy-mm-dd format",
+                "type": "string",
+                "format": "date",
+                "minLength": 10,
+                "maxLength": 10
+              },
+              "end_time": {
+                "description": "The time when the event ends, in the hh:mm:ss format",
+                "type": "string",
+                "format": "time"
+              },
+              "place": {
+                "description": "Free text that can be used to communicate the location, the price, and additional information. \n can be used as a newline",
+                "type": "string",
+                "maxLength": 191
+              },
+              "icon": {
+                "description": "The name of a font-awesome icon, taken from: https://fontawesome.com/search?m=free&s=solid",
+                "type": "string",
+                "maxLength": 191
+              },
+              "color": {
+                "description": "A color in hex format: #AABBCC",
+                "type": "string",
+                "minLength": 7,
+                "maxLength": 7,
+                "pattern": "^#(?:[0-9a-fA-F]{3}){1,2}$"
+              },
+              "preparation_time": {
+                "description": "How many minutes in advance the preparation countdown should be shown. By default: 30",
+                "type": "integer",
+                "minimum": 0
+              },
+              "marquee": {
+                "description": "This text will scroll on the monitors during the event",
+                "type": "string",
+                "maxLength": 150
+              },
+              "link": {
+                "description": "This link will be shown on the monitor advertisement slide as a QR code. https is required.",
+                "type": "string",
+                "format": "uri",
+                "pattern":"^https:\/\/"
+              },
+              "cancelled": {
+                "description": "If true, the event will be advertised as cancelled (with a strike-through title)",
+                "type": "boolean"
+              },
+              "updated_on": {
+                "description": "When this event was edited the last time on the source",
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "import_id",
+              "name",
+              "start",
+              "start_time",
+              "end",
+              "end_time",
+              "updated_on"
+            ]
+          }
+        ]
+      }
+    },
+    "required": [
+      "generated_on",
+      "events"
+    ]
+  }

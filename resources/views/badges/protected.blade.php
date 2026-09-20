@@ -1,0 +1,1 @@
+<span class="badge text-bg-warning" data-bs-toggle="tooltip" data-bs-title="{{__('When locked, changing the original event on the server of origin has no effect on this.')}}"><i class="fas fa-fw fa-lock"></i>&nbsp;{{__('locked')}}</span>

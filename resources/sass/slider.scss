@@ -1,0 +1,931 @@
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+//TODO: do I need bootstrap here? Yes
+@import 'animate.css';
+
+//Those variables are initialized in webpack.mix.js and can be changed in the env file
+:root {
+    --main-color: #{$main-color};
+    --background-color: #{$background-color};
+    --text-color: #{$text-color};
+    --negative-marquee-length: -50em;
+    --marquee-speed: 20s;
+}
+
+#event-slide * {
+    transition: color 2s linear, border-color 2s linear; // keep this in sync with EventSlude.ts if changed!
+}
+
+@font-face {
+    font-family: WebTrebuchet;
+    font-display: swap;
+    src: url('/resources/assets/fonts/Trebuchet-MS.woff');
+}
+
+html,
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    cursor: none;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Trebuchet MS", WebTrebuchet, Helvetica, sans-serif;
+
+    /* Prevent the blinking cursor */
+    /* Safari / Chrome Kiosk engines */
+    -webkit-user-select: none;
+    /* Firefox */
+    -moz-user-select: none;
+    /* Standard CSS */
+    user-select: none;
+
+    /* Disables callout menu on touch screens */
+    -webkit-touch-callout: none;
+    /* Prevents focus rings if someone plugs a device in */
+    outline: none;
+}
+
+hr {
+    background-color: white;
+}
+
+.english {
+    font-style: italic;
+    font-size: 60%;
+}
+
+#main-container {
+    position: relative;
+    display: table;
+    height: 100%;
+    width: 100%;
+    max-width: 125vh;
+    min-width: 125vh;
+    padding: 1vh;
+    margin: auto;
+    overflow: hidden;
+}
+
+#event-slide {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#left-part-container {
+    float: left;
+    flex-grow: 1;
+    min-width: 20vw;
+    text-align: center;
+    overflow: visible;
+}
+
+#main-icon {
+    font-size: 19vh;
+    max-width: 25vh;
+    min-width: 25vh;
+}
+
+#qr-code {
+    display: block;
+    clear: left;
+    margin: 7vh auto 0 auto;
+    max-width: 23vh;
+    min-width: 23vh;
+    max-height: 23vh;
+    min-height: 23vh;
+}
+
+.event-name {
+    color: var(--main-color);
+    font-size: 10.5vh;
+    margin-bottom: 2vh;
+}
+
+.menu-name {
+    display: inline-block;
+    width: 100vh;
+    color: var(--main-color);
+    font-size: 10.5vh;
+    margin-bottom: 2vh;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+.menu-icon {
+    display: inline-block;
+}
+
+.cancelled {
+    text-decoration: line-through;
+    color: tomato;
+}
+
+.start {
+    display: inline-block;
+}
+
+.start-time {
+    display: inline-block;
+    position: absolute;
+    right: 3vh;
+}
+
+
+
+.event-details {
+    flex-grow: 4;
+    display: inline-block;
+    font-size: 5.8vh;
+    max-height: 89vh;
+    padding: 0 4vh;
+    word-break: normal;
+    word-wrap: break-word;
+}
+
+#progress-bar {
+    display: table;
+    left: 20vw;
+    position: absolute;
+    font-size: 2vh;
+    top: 1vh;
+    width: 78vw;
+}
+
+.shrink {
+    width: 0 !important;
+}
+
+#progress {
+    border-radius: 0.4vh;
+    background-color: var(--main-color);
+    display: table-caption;
+    width: 78vw;
+    height: 0.8vh;
+}
+
+.pb_element {
+    border-top: 1px solid var(--main-color);
+    display: table-cell;
+    text-align: center;
+}
+
+.pb_element.active {
+    background-color: gray;
+    border-bottom: 2px solid var(--main-color);
+    border-top: none;
+    color: black;
+    font-weight: bold;
+}
+
+/*Fatal error*/
+#fatal-error-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 52;
+    background-color: #430000;
+    text-align: center;
+    font-size: 6vh;
+    padding: 5vh;
+    height: 100vh;
+    width: 100vw;
+}
+
+#fatal-error-content {
+    color: white;
+    margin: auto;
+    height: 100vh;
+    width: 100vh;
+}
+
+#fatal-error-message {
+    font-size: 5vh;
+    font-style: italic;
+}
+
+div.fatal-error {
+    color: #ff0000;
+}
+
+/*Loading*/
+#loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    background-color: var(--background-color);
+    text-align: center;
+    font-size: 6vh;
+    padding: 5vh;
+    height: 100vh;
+    width: 100vw;
+}
+
+#loading-content {
+    margin: auto;
+    height: 100vh;
+    width: 100vh;
+}
+
+.loading {
+    display: block;
+    margin: 5vh 0;
+    font-size: 15vh;
+}
+
+.monitor-name {
+    color: var(--main-color);
+    font-size: 10vh;
+}
+
+.version {
+    position: absolute;
+    bottom: 2%;
+    left: 2%;
+}
+
+/*Final-round*/
+#final-round-container {
+    text-align: center;
+}
+
+.finalText {
+    font-size: 14vh;
+}
+
+.countdown {
+    position: absolute;
+    font-size: 39vh;
+    line-height: 39vh;
+    font-weight: bolder;
+    height: 39vh;
+    width: 110vh;
+    left: 50%;
+    margin-left: -55vh;
+    bottom: 4vh;
+    overflow: hidden;
+}
+
+/*Final 15 minutes*/
+#final-15-minutes {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+#final-15-minutes i {
+    display: table-cell;
+    font-size: 20vh;
+    padding-left: 2vh;
+    vertical-align: middle;
+}
+
+#wir-schliessen {
+    display: table-cell;
+    font-size: 13vh;
+    font-weight: bold;
+    padding-left: 3vh;
+    word-break: normal;
+    word-wrap: break-word;
+}
+
+/*Thirty Minutes after*/
+//#thirty-minutes-after {
+//}
+
+.table {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+#thirty-minutes-after i {
+    display: table-cell;
+    font-size: 16vh;
+    padding: 2vh;
+    vertical-align: middle;
+}
+
+#wir-haben-geschlossen {
+    color: var(--main-color);
+    display: table-cell;
+    font-size: 8vh;
+    font-weight: bold;
+    line-height: 8vh;
+    padding-left: 4vh;
+    vertical-align: middle;
+    word-break: normal;
+    word-wrap: break-word;
+}
+
+#mitgliederWerbung {
+    display: block;
+    font-size: 9vh;
+    padding: 1vh 1vh 0 3vh;
+    word-break: normal;
+    word-wrap: break-word;
+}
+
+/*Clock*/
+#clock {
+    width: fit-content;
+    height: fit-content;
+    bottom: 1vh;
+    color: #444444;
+    font-size: 6vh;
+    padding-right: 2vh;
+    position: absolute;
+    right: 0;
+    z-index: 51;
+}
+
+/*Marquee bar*/
+#bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    height: 10.5vh;
+    width: 100%;
+}
+
+#marqueeText {
+    color: var(--main-color);
+    font-size: 6vh;
+    position: absolute;
+    margin: 0;
+    height: 100%;
+    line-height: 10.5vh;
+    z-index: 1;
+    font-weight: bolder;
+    white-space: nowrap;
+    animation: marquee var(--marquee-speed) linear infinite;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/*Preparations*/
+#preparations .event-name {
+    font-weight: bold;
+    line-height: 90%;
+    margin: 2vh auto 0 auto;
+    text-align: center;
+    justify-content: center;
+    max-height: 41vh;
+    height: 41vh;
+    width: 98%;
+    max-width: 98%;
+    display: block;
+    align-items: center;
+    overflow: hidden;
+    text-shadow: 3px 6px 4px #cec9c9;
+}
+
+#preparations-icon {
+    color: #ffffff;
+    display: block;
+    font-size: 10vh;
+    position: absolute;
+    top: 45vh;
+    left: 54vh;
+}
+
+#in {
+    font-size: 12vh;
+    line-height: 12vh;
+    position: absolute;
+    left: 3vh;
+    top: 49vh;
+}
+
+/* Happy Hour*/
+#happy-hour-container {
+    text-align: center;
+}
+
+.happyhour {
+    font-size: 15vh;
+    line-height: 17vh;
+    font-weight: bold;
+}
+
+#happy-hour-drink {
+    color: var(--main-color);
+    font-size: 11vh;
+    line-height: 16vh;
+    margin-top: 2vh;
+    word-break: normal;
+    word-wrap: break-word;
+    text-shadow: 3px 6px 4px #cec9c9;
+}
+
+#happy-hour-priceline {
+    font-size: 9vh;
+    line-height: 11vh;
+}
+
+#happy-hour-extra {
+    font-size: 5vh;
+}
+
+#happy-hour-container>div.countdown {
+    font-size: 34vh;
+    font-weight: normal;
+}
+
+#happy-hour-container>div.countdown>span.hours {
+    vertical-align: text-top;
+    font-size: 10vh;
+    position: relative;
+    top: -9vh;
+    left: -1vh;
+}
+
+#happy-hour-container>div.countdown>span.hours::after {
+    content: 'h';
+}
+
+/*Menu*/
+#menu-container {
+    padding-left: 1.8vh;
+    padding-right: 1.8vh;
+}
+
+.menu_item {
+    font-size: 4.5vh;
+    border-bottom: 1px solid #ffffff;
+    clear: both;
+}
+
+.menu_item.odd {
+    color: #80ffff;
+    border-bottom: 1px solid #80ffff;
+}
+
+.menu_item span {
+    float: right;
+    text-align: right;
+    display: block;
+}
+
+.menu_item_special::before {
+    content: '⭐';
+}
+
+.menu_item_special {
+    background-color: #980000 !important;
+    border-bottom: solid 4pt #FF7A2D !important;
+}
+
+.menu-icon {
+    color: var(--main-color);
+    font-size: 9vh;
+    float: right;
+    margin-top: 3vh;
+}
+
+div#pics-container {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#pics-container>img {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+/*Videos*/
+#videos-container {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+}
+
+#mainVideo {
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+
+/*Weather Forecast*/
+#weather {
+    padding: 1vh;
+    background-color: #000000;
+}
+
+#weatherTitle {
+    line-height: 10vh;
+    font-size: 5vh;
+    display: inline-block;
+    color: white;
+}
+
+#theWeather {
+    display: inline-block;
+}
+
+.superscript {
+    vertical-align: super;
+    font-size: 60%;
+}
+
+#placeName {
+    color: var(--main-color);
+    max-width: 65vh;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    font-size: 7vh;
+    font-weight: bold;
+    vertical-align: bottom;
+}
+
+#sunTimes {
+    float: right;
+}
+
+.sunTime time {
+    margin-left: 1vh;
+}
+
+#sunSet {
+    margin-top: 1vh;
+}
+
+.sunTime {
+    font-size: 4.5vh;
+    line-height: 4.5vh;
+}
+
+.temp_feels {
+    font-size: 3.3vh;
+}
+
+.temp_feels::before {
+    content: ' (';
+}
+
+.temp_feels::after {
+    content: ')';
+}
+
+.time.table-header-cell {
+    width: 12vh;
+}
+
+.weatherIcon.table-header-cell {
+    width: 8vh;
+}
+
+.weatherTemperature.table-header-cell {
+    width: 23vh;
+}
+
+.weatherCloud.table-header-cell {
+    width: 12vh;
+}
+
+.weatherDescr.table-header-cell {
+    width: 45vh;
+}
+
+.time {
+    text-align: right;
+    padding-right: 1vh;
+}
+
+.weatherIcon img {
+    width: 8.9vh;
+}
+
+.weatherTemperature {
+    text-align: right;
+    padding-right: 2vh;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.weatherDescr {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.weatherCloud {
+    text-align: center;
+    padding-right: 2vh;
+}
+
+
+.resp-table {
+    width: 100%;
+    display: table;
+    font-size: 5vh;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.resp-table-caption {
+    display: table-caption;
+    text-align: center;
+    font-weight: bold;
+}
+
+.resp-table-header {
+    display: table-header-group;
+    border-bottom: 0.5vh solid var(--main-color);
+    font-weight: bold;
+    font-size: 5vh;
+    line-height: 5vh;
+    max-height: 5vh;
+}
+
+.table-header-cell {
+    display: table-cell;
+    padding: 1vh;
+    text-align: center;
+    border-bottom: 0.5vh solid black;
+    overflow: hidden;
+}
+
+.resp-table-body {
+    display: table-row-group;
+}
+
+.resp-table-row {
+    display: table-row;
+    font-size: 5.5vh;
+    line-height: 8vh;
+    max-height: 10vh;
+    background-color: #303030;
+}
+
+.resp-table-row.even {
+    background-color: unset;
+}
+
+.table-body-cell {
+    display: table-cell;
+    overflow: hidden;
+}
+
+#noWarranty {
+    color: gray;
+    font-size: 3vh;
+}
+
+#weather h4 {
+    margin-top: 0.7vh;
+    min-width: 100%;
+    font-weight: bolder;
+    font-size: 3.5vh;
+    border-bottom: 0.4vh solid var(--main-color);
+    padding-bottom: 1vh;
+    margin-bottom: 0;
+}
+
+/* Event small */
+#event-slide-small {
+    position: absolute;
+    bottom: 1vh;
+    left: 0;
+    width: 100%;
+    border-top: 2px #ffffff solid;
+    margin: auto;
+    background-color: var(--background-color);
+}
+
+#event-slide-small .event-name {
+    font-size: 6.5vh;
+    font-weight: bold;
+    margin-left: 2vh;
+    width: 123vh;
+    margin-bottom: initial;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hidden {
+    display: none;
+}
+
+#main-icon-small {
+    float: left;
+    margin-top: 1vh;
+    font-size: 12vh;
+    padding: 1vh;
+}
+
+.event-details .fas {
+    font-size: 4.5vh;
+}
+
+#karaoke h1 {
+    text-align: center;
+    color: var(--main-color);
+    font-weight: bolder;
+}
+
+#karaoke table {
+    margin: 0 auto;
+    width: 95%;
+}
+
+#karaoke thead {
+    font-size: 5vh;
+}
+
+#karaoke td:nth-child(1) {
+    max-width: 6vh;
+}
+
+#karaoke td:nth-child(2) {
+    max-width: 54vh;
+}
+
+#karaoke td:nth-child(3) {
+    max-width: 40vh;
+}
+
+#karaoke td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 1vh;
+}
+
+#karaoke tr:nth-child(even) {
+    background-color: #aaaaaa70;
+    border-top: 2px solid var(--main-color);
+    border-bottom: 2px solid var(--main-color);
+}
+
+#karaoke tbody {
+    font-size: 4vh;
+}
+
+#karaoke tbody tr:nth-child(1) {
+    font-weight: bolder;
+    color: var(--main-color);
+}
+
+.section {
+    display: block;
+    white-space: pre-line;
+}
+
+
+#alert {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2147483647;
+    background-color: #00264d;
+
+    #alert-title {
+        color: #FF8080;
+        width: 100%;
+        height: 20vh;
+        font-size: 150px;
+        text-align: center;
+        padding: 1vh;
+        overflow: hidden;
+    }
+
+    #alert-qr {
+        display: block;
+        margin: 2vh 2vh 0px 0px;
+        max-width: 23vh;
+        min-width: 23vh;
+        max-height: 23vh;
+        min-height: 23vh;
+    }
+
+    #alert-message {
+        padding: 1vh 3vh;
+        width: 100%;
+        height: 77vh;
+        font-size: 150px;
+        overflow: hidden;
+        white-space: pre-line;
+    }
+
+    #alert-title.nina {
+        font-size: 10vh;
+    }
+
+
+    #alert-message.nina {
+        font-size: 8vh;
+        white-space: initial;
+    }
+
+    #alert-icon {
+        display: block;
+        position: absolute;
+        bottom: 1.5vh;
+        right: 1.5vh;
+        font-size: 8vh;
+        opacity: 0.6;
+        z-index: 1;
+    }
+}
+
+.ordersslide {
+    height: 90vh;
+    width: 100%;
+    vertical-align: top;
+}
+
+#ol-counters {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    padding-left: 2vw;
+    overflow: hidden;
+    max-height: 10vh;
+}
+
+#ol-pending .orderslist {
+    font-size: 6vh;
+}
+
+#ol-fulfilled .orderslist {
+    font-size: 7vh;
+}
+
+#ol-pickup .orderslist {
+    font-size: 8vh;
+    background-color: #aaaaaa;
+    color: black;
+}
+
+.orderslist {
+    padding-left: 3vh;
+}
+
+.ol-item {
+    display: inline-block;
+}
+
+.ordersbox {
+    vertical-align: top;
+    min-height: 15vh;
+    border-bottom: 1px solid var(--text-color);
+    margin: 0;
+
+    .title {
+        font-size: 6vh;
+    }
+}
+
+.ordersbox:last-child {
+    border-bottom: none;
+}
+
+#orderslist-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--background-color);
+    font-size: 6vh;
+    padding: 2vh;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    overflow: hidden;
+}

@@ -1,0 +1,8 @@
+css/
+fonts/
+img/
+js
+mix-manifest.json
+status.json
+
+!img/amcharts_weather_icons

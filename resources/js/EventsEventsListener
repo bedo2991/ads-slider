@@ -1,0 +1,18 @@
+import { Publisher } from "./patterns/Publisher";
+import { Subscriber } from "./patterns/Subscriber";
+
+export class EventsEventListener implements Publisher {
+    private subscribers: Set<Subscriber> = new Set();
+    subscribe(subscriber: Subscriber): void {
+        this.subscribers.add(subscriber);
+    }
+    unsubscribe(subscriber: Subscriber): void {
+        this.subscribers.delete(subscriber);
+    }
+    notifySubscribers(event: string): void {
+        this.subscribers.forEach((e) => {
+            e.update(event);
+        });
+    }
+
+}

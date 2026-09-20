@@ -1,0 +1,1 @@
+<span class="badge text-bg-danger"><i class="fas  fa-fw fa-eye-slash"></i>&nbsp;{{__('Disabled')}}</span>

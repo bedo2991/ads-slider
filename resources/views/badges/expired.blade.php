@@ -1,0 +1,1 @@
+<span class="badge text-bg-dark"><i class="fas fa-fw fa-hourglass-end"></i>&nbsp;{{__('Expired')}}</span>
