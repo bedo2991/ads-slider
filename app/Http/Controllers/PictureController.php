@@ -28,7 +28,7 @@ class PictureController extends Controller
 
     public function __construct()
     {
-        $this->authorizeResource(Picture::class, 'pic');
+        $this->authorizeResource(Picture::class, 'pic', ['except' => ['show']]);
     }
 
     /**
@@ -124,7 +124,7 @@ class PictureController extends Controller
             $this->authorize('view', $pic);
         } else {
             // Enforce monitor token realm scoping
-            $token = $request->header('X-API-TOKEN') ?? $request->query('api_token');
+            $token = $request->header('X-API-TOKEN') ?? $request->query('api_token') ?? $request->input('api_token');
             $monitor = Monitor::where('api_token', $token)->first();
 
             if (! $monitor || $monitor->realm_id !== $pic->realm_id) {
@@ -136,9 +136,16 @@ class PictureController extends Controller
         $targetHeight = (int) $request->input('height');
 
         $source = $pic->getBestSource($targetWidth, $targetHeight);
-        $path = $source ? $source->path : '';
+        if (! $source) {
+            abort(404, 'Picture source not found.');
+        }
 
-        return response()->file(Storage::disk('public')->path(config('ads.pic_basepath').$path));
+        $path = config('ads.pic_basepath').$source->path;
+        if (! Storage::disk('public')->exists($path)) {
+            abort(404, 'File not found.');
+        }
+
+        return response()->file(Storage::disk('public')->path($path));
     }
 
     /**

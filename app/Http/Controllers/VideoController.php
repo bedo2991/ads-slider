@@ -25,7 +25,7 @@ class VideoController extends Controller
 
     public function __construct()
     {
-        $this->authorizeResource(Video::class, 'video');
+        $this->authorizeResource(Video::class, 'video', ['except' => ['show']]);
     }
 
     /**
@@ -99,13 +99,13 @@ class VideoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Video $video): BinaryFileResponse
+    public function show(Request $request, Video $video): BinaryFileResponse
     {
         if (Auth::check()) {
             $this->authorize('view', $video);
         } else {
             // Enforce monitor token realm scoping
-            $token = $request->header('X-API-TOKEN') ?? $request->query('api_token');
+            $token = $request->header('X-API-TOKEN') ?? $request->query('api_token') ?? $request->input('api_token');
             $monitor = Monitor::where('api_token', $token)->first();
 
             if (! $monitor || $monitor->realm_id !== $video->realm_id) {
@@ -113,7 +113,12 @@ class VideoController extends Controller
             }
         }
 
-        return response()->file(Storage::disk('public')->path(config('ads.vid_basepath').$video->path));
+        $path = config('ads.vid_basepath').$video->path;
+        if (! Storage::disk('public')->exists($path)) {
+            abort(404, 'File not found.');
+        }
+
+        return response()->file(Storage::disk('public')->path($path));
     }
 
     /**

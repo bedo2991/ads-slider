@@ -454,4 +454,137 @@ class MediaControllersTest extends TestCase
         $this->assertNotNull($videos);
         $this->assertGreaterThanOrEqual(1, $videos->get()->count());
     }
+
+    public function test_unauthenticated_media_show_with_valid_api_token(): void
+    {
+        auth()->logout();
+
+        // 1. Picture
+        $picture = Picture::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+        ]);
+        $picSource = $picture->sources->first();
+        Storage::disk('public')->put(config('ads.pic_basepath').$picSource->path, 'image-data');
+
+        $response = $this->get("/pics/{$picture->id}?api_token={$this->monitor->api_token}&width=902&height=831");
+        $response->assertStatus(200);
+
+        // Header token format
+        $response = $this->withHeader('X-API-TOKEN', $this->monitor->api_token)->get("/pics/{$picture->id}");
+        $response->assertStatus(200);
+
+        // 2. Video
+        $video = Video::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+            'path' => 'test_vid.mp4',
+        ]);
+        Storage::disk('public')->put(config('ads.vid_basepath').$video->path, 'video-data');
+
+        $response = $this->get("/videos/{$video->id}?api_token={$this->monitor->api_token}");
+        $response->assertStatus(200);
+
+        // 3. Menu
+        $menu = Menu::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+            'path' => 'test_menu.json',
+        ]);
+        Storage::disk('public')->put(config('ads.menu_basepath').$menu->path, '{"menu":true}');
+
+        $response = $this->get("/menus/{$menu->id}?api_token={$this->monitor->api_token}");
+        $response->assertStatus(200);
+    }
+
+    public function test_unauthenticated_media_show_without_token_or_invalid_token_returns_403(): void
+    {
+        auth()->logout();
+
+        $picture = Picture::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+        ]);
+        $video = Video::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+            'path' => 'test_vid.mp4',
+        ]);
+        $menu = Menu::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+            'path' => 'test_menu.json',
+        ]);
+
+        // Missing token
+        $this->get("/pics/{$picture->id}")->assertStatus(403);
+        $this->get("/videos/{$video->id}")->assertStatus(403);
+        $this->get("/menus/{$menu->id}")->assertStatus(403);
+
+        // Invalid token
+        $this->get("/pics/{$picture->id}?api_token=invalid_token")->assertStatus(403);
+        $this->get("/videos/{$video->id}?api_token=invalid_token")->assertStatus(403);
+        $this->get("/menus/{$menu->id}?api_token=invalid_token")->assertStatus(403);
+    }
+
+    public function test_unauthenticated_media_show_across_tenants_returns_403(): void
+    {
+        auth()->logout();
+
+        $otherRealm = Realm::factory()->create();
+        $otherMonitor = Monitor::factory()->create([
+            'realm_id' => $otherRealm->id,
+        ]);
+
+        $picture = Picture::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+        ]);
+        $video = Video::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+            'path' => 'test_vid.mp4',
+        ]);
+        $menu = Menu::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+            'path' => 'test_menu.json',
+        ]);
+
+        $this->get("/pics/{$picture->id}?api_token={$otherMonitor->api_token}")->assertStatus(403);
+        $this->get("/videos/{$video->id}?api_token={$otherMonitor->api_token}")->assertStatus(403);
+        $this->get("/menus/{$menu->id}?api_token={$otherMonitor->api_token}")->assertStatus(403);
+    }
+
+    public function test_unauthenticated_media_show_missing_file_returns_404(): void
+    {
+        auth()->logout();
+
+        $picture = Picture::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+        ]);
+        $picture->sources()->create([
+            'path' => 'missing_pic.jpg',
+            'width' => 1920,
+            'height' => 1080,
+            'clock_location' => 5,
+        ]);
+
+        $video = Video::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+            'path' => 'missing_vid.mp4',
+        ]);
+
+        $menu = Menu::factory()->create([
+            'user_id' => $this->user->id,
+            'realm_id' => $this->realm->id,
+            'path' => 'missing_menu.json',
+        ]);
+
+        $this->get("/pics/{$picture->id}?api_token={$this->monitor->api_token}")->assertStatus(404);
+        $this->get("/videos/{$video->id}?api_token={$this->monitor->api_token}")->assertStatus(404);
+        $this->get("/menus/{$menu->id}?api_token={$this->monitor->api_token}")->assertStatus(404);
+    }
 }

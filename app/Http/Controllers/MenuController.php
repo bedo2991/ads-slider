@@ -24,7 +24,7 @@ class MenuController extends Controller
 
     public function __construct()
     {
-        $this->authorizeResource(Menu::class, 'menu');
+        $this->authorizeResource(Menu::class, 'menu', ['except' => ['show']]);
     }
 
     /**
@@ -106,7 +106,7 @@ class MenuController extends Controller
             $this->authorize('view', $menu);
         } else {
             // Enforce monitor token realm scoping
-            $token = $request->header('X-API-TOKEN') ?? $request->query('api_token');
+            $token = $request->header('X-API-TOKEN') ?? $request->query('api_token') ?? $request->input('api_token');
             $monitor = Monitor::where('api_token', $token)->first();
 
             if (! $monitor || $monitor->realm_id !== $menu->realm_id) {
@@ -114,7 +114,12 @@ class MenuController extends Controller
             }
         }
 
-        return response()->file(Storage::disk('public')->path(config('ads.menu_basepath').$menu->path), ['Content-Type' => 'application/json']);
+        $path = config('ads.menu_basepath').$menu->path;
+        if (! Storage::disk('public')->exists($path)) {
+            abort(404, 'File not found.');
+        }
+
+        return response()->file(Storage::disk('public')->path($path), ['Content-Type' => 'application/json']);
     }
 
     /**
