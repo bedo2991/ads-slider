@@ -15,6 +15,10 @@ class Realm extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
+    protected $casts = [
+        'marketing_sentences' => 'array',
+    ];
+
     public function removeOrdersPull(): bool
     {
         $this->orders_pull = null;

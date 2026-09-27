@@ -17,9 +17,48 @@
 }
 
 @font-face {
-    font-family: WebTrebuchet;
+    font-family: 'Fira Sans';
+    font-style: normal;
+    font-weight: 400;
     font-display: swap;
-    src: url('/resources/assets/fonts/Trebuchet-MS.woff');
+    src: url('/resources/assets/fonts/FiraSans/FiraSans-Regular.woff2') format('woff2'),
+         url('/resources/assets/fonts/FiraSans/FiraSans-Regular.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Fira Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/resources/assets/fonts/FiraSans/FiraSans-SemiBold.woff2') format('woff2'),
+         url('/resources/assets/fonts/FiraSans/FiraSans-SemiBold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Fira Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/resources/assets/fonts/FiraSans/FiraSans-Bold.woff2') format('woff2'),
+         url('/resources/assets/fonts/FiraSans/FiraSans-Bold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Fira Sans';
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/resources/assets/fonts/FiraSans/FiraSans-Italic.woff2') format('woff2'),
+         url('/resources/assets/fonts/FiraSans/FiraSans-Italic.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Fira Sans';
+    font-style: italic;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/resources/assets/fonts/FiraSans/FiraSans-BoldItalic.woff2') format('woff2'),
+         url('/resources/assets/fonts/FiraSans/FiraSans-BoldItalic.woff') format('woff');
 }
 
 html,
@@ -29,7 +68,7 @@ body {
     cursor: none;
     height: 100%;
     overflow: hidden;
-    font-family: "Trebuchet MS", WebTrebuchet, Helvetica, sans-serif;
+    font-family: "Fira Sans", Helvetica, sans-serif;
 
     /* Prevent the blinking cursor */
     /* Safari / Chrome Kiosk engines */

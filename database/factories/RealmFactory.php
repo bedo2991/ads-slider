@@ -15,6 +15,10 @@ class RealmFactory extends Factory
     {
         return [
             'name' => $this->faker->sentence(2),
+            'marketing_sentences' => [
+                'Lust hinter der Theke zu stehen? Komm zur Versammlung vorbei!',
+                'Would you like to try working behind the bar? Visit us during our weekly meeting!',
+            ],
             'created_at' => now(),
             'updated_at' => now(),
         ];

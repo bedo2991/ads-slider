@@ -294,6 +294,13 @@ class MonitorController extends Controller
         $data['m'] = $monitor->toArray();
         $data['m']['api_token'] = $monitor->api_token;
         $data['m']['channel_hash'] = Realm::getBroadcastChannelSecret($monitor->realm_id);
+
+        $effectiveMarketingSentences = $monitor->getEffectiveMarketingSentences();
+        $data['marketing_sentences'] = $effectiveMarketingSentences;
+        $data['m']['marketing_sentences'] = $effectiveMarketingSentences;
+        if (empty($effectiveMarketingSentences)) {
+            $data['m']['show_we_are_closed_marketing'] = false;
+        }
         $data['e'] = EventController::getScheduledEvents($monitor->realm_id)->with(['menus:id,path', 'happy_hour'])->get()->sortBy(function ($event) {
             return [
                 $event->real_start_date,

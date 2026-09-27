@@ -69,6 +69,9 @@ class MonitorForm extends Form
     #[Validate('boolean')]
     public $show_orderslist = false;
 
+    #[Validate('nullable|string')]
+    public $marketing_sentences = '';
+
     public function saveMonitor()
     {
         $validated = $this->validate();
@@ -84,6 +87,13 @@ class MonitorForm extends Form
             $validated['show_weather_forecast'] = false;
         }
 
+        if ($this->marketing_sentences) {
+            $lines = array_values(array_filter(array_map('trim', explode("\n", (string) $this->marketing_sentences)), fn ($s) => $s !== ''));
+            $validated['marketing_sentences'] = ! empty($lines) ? $lines : null;
+        } else {
+            $validated['marketing_sentences'] = null;
+        }
+
         $this->monitor->fill($validated);
         $this->monitor->user_id = Auth::id();
         $this->monitor->save();
@@ -97,21 +107,22 @@ class MonitorForm extends Form
         $this->monitor = $m;
         $this->name = $m->name;
         $this->events_to_show = $m->events_to_show;
-        $this->show_preparation_countdowns = $m->show_preparation_countdowns;
-        $this->show_final_rounds = $m->show_final_rounds;
-        $this->show_we_are_closing = $m->show_we_are_closing;
-        $this->show_we_are_closed_marketing = $m->show_we_are_closed_marketing;
-        $this->show_cancelled_events = $m->show_cancelled_events;
-        $this->show_menus = $m->show_menus;
-        $this->show_happy_hours = $m->show_happy_hours;
-        $this->show_pictures = $m->show_pictures;
-        $this->show_videos = $m->show_videos;
-        $this->show_karaoke = $m->show_karaoke;
-        $this->show_weather_forecast = $m->show_weather_forecast;
-        $this->use_animations = $m->use_animations;
-        $this->show_marquee = $m->show_marquee;
-        $this->show_event_while_is_happening = $m->show_event_while_is_happening;
-        $this->show_orderslist = $m->show_orderslist;
+        $this->show_preparation_countdowns = (bool) $m->show_preparation_countdowns;
+        $this->show_final_rounds = (bool) $m->show_final_rounds;
+        $this->show_we_are_closing = (bool) $m->show_we_are_closing;
+        $this->show_we_are_closed_marketing = (bool) $m->show_we_are_closed_marketing;
+        $this->marketing_sentences = is_array($m->marketing_sentences) ? implode("\n", $m->marketing_sentences) : '';
+        $this->show_cancelled_events = (bool) $m->show_cancelled_events;
+        $this->show_menus = (bool) $m->show_menus;
+        $this->show_happy_hours = (bool) $m->show_happy_hours;
+        $this->show_pictures = (bool) $m->show_pictures;
+        $this->show_videos = (bool) $m->show_videos;
+        $this->show_karaoke = (bool) $m->show_karaoke;
+        $this->show_weather_forecast = (bool) $m->show_weather_forecast;
+        $this->use_animations = (bool) $m->use_animations;
+        $this->show_marquee = (bool) $m->show_marquee;
+        $this->show_event_while_is_happening = (bool) $m->show_event_while_is_happening;
+        $this->show_orderslist = (bool) $m->show_orderslist;
         $this->locale = $m->locale;
     }
 }

@@ -64,6 +64,11 @@
                         text="{{__('If 0, polling is disabled')}}" />
                 </x-forms.inputs.number>
 
+                <x-forms.inputs.textarea name="form.marketing_sentences" rows="6" label="{{__('Standard marketing sentences')}}">
+                    <x-forms.helpers.help
+                        text="{{__('One sentence per line. These sentences are shown on monitors during the -we are closed- slide, unless overridden by a monitor.')}}" />
+                </x-forms.inputs.textarea>
+
                 <div class="my-3" />
 
                 <x-forms.buttons.primary text="{{ __('Save Realm') }}" />

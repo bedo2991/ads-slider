@@ -44,6 +44,9 @@ class RealmForm extends Form
     #[Validate('integer|min:0|max:86400')]
     public $orders_polling_frequency = 60; // in seconds
 
+    #[Validate('nullable|string')]
+    public $marketing_sentences = '';
+
     public function saveRealm()
     {
         $validated = $this->validate();
@@ -51,6 +54,13 @@ class RealmForm extends Form
         if ($this->nina_ars && strlen($this->nina_ars) > 7) {
             $this->nina_ars = substr($this->nina_ars, 0, -7).'0000000';
             $validated['nina_ars'] = $this->nina_ars;
+        }
+
+        if ($this->marketing_sentences) {
+            $lines = array_values(array_filter(array_map('trim', explode("\n", (string) $this->marketing_sentences)), fn ($s) => $s !== ''));
+            $validated['marketing_sentences'] = ! empty($lines) ? $lines : null;
+        } else {
+            $validated['marketing_sentences'] = null;
         }
 
         if (! $this->realm) {
@@ -77,5 +87,6 @@ class RealmForm extends Form
         $this->orders_pull = $realm->orders_pull;
         $this->orders_link = $realm->orders_link;
         $this->orders_polling_frequency = $realm->orders_polling_frequency ?? 60; // default to 60 seconds
+        $this->marketing_sentences = is_array($realm->marketing_sentences) ? implode("\n", $realm->marketing_sentences) : '';
     }
 }

@@ -55,6 +55,9 @@ onmessage = function receiveMessage(m) {
   switch (m.data.action) {
 
     case SchedulerActions.startProcessing:
+      if (m.data.config) {
+        Object.assign(config, m.data.config);
+      }
       startListening();
       break;
 

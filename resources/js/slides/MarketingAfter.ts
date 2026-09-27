@@ -1,9 +1,25 @@
+import { Mediator } from "../patterns/Mediator.js";
 import { MiniSlide } from "./MiniSlides.js";
 import { UnskippableSlide } from "./UnskippableSlide.js";
 
 export class MarketingAfter extends UnskippableSlide {
     private interval: ReturnType<typeof setInterval> | null = null;
     private sentenceHolder: HTMLDivElement | null = null;
+    private sentences: string[] = [];
+
+    constructor(mediator: Mediator, mainDiv: HTMLDivElement, sentences: string[] = []) {
+        super(mediator, mainDiv);
+        this.sentences = sentences;
+    }
+
+    setSentences(sentences: string[]): void {
+        this.sentences = sentences;
+    }
+
+    getSentences(): string[] {
+        return this.sentences;
+    }
+
     onCreate(): void {
         super.onCreate();
         console.log("MarketingAfter created");
@@ -72,25 +88,9 @@ export class MarketingAfter extends UnskippableSlide {
     }
 
     getSentence(): string {
+        if (!this.sentences || this.sentences.length === 0) {
+            return '';
+        }
         return this.sentences[Math.floor(Math.random() * this.sentences.length)];
     }
-
-    private sentences: string[] = [
-        'Lust hinter der Theke zu stehen? Komm zur Versammlung vorbei!',
-        'Would you like to try working behind the bar? Visit us during our weekly meeting!',
-        'Wärst du gerne länger geblieben? Werde Mitglied und ändere das!',
-        'Would you have stayed longer? Become a member and make that happen.',
-        'Der Club wird jetzt aufgeräumt. Wie wäre es mit ein bisschen helfen?',
-        'We are going to clean up the club now, how about helping a little bit?',
-        'Hast du noch alles dabei? Handy, Schlüssel, Brille, Gute Laune, Würde…',
-        'Do you still have everything? Mobile phone, keys, glasses, good mood, dignity…',
-        'Schon gewusst? Wir arbeiten hier freiwillig und kriegen kein Geld.',
-        "Did you know? We all work here voluntarily and don't earn any money.",
-        "Kein Alkohol am Steuer! - Don't drink and drive!",
-        'Ja, das hier zu lesen ist lustig, du sollst aber bestimmt nach Hause…',
-        'Sure, reading these messages is fun, but I guess you should probably go home now…',
-        'Bis ganz zum Ende geblieben? Du bist der perfekte Kandidat für uns!',
-        'Did you remain until the end? You are the perfect candidate for us!',
-        'Hier könnte ein emotionaler Text stehen. Tut es aber nicht.',
-    ];
 }

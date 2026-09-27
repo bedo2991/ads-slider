@@ -101,6 +101,12 @@ window.Echo = new Echo({
 
 //require('dayjs/locale/de');
 
+const initialRawSentences = (data.marketing_sentences ?? data.m.marketing_sentences ?? []);
+let marketingSentences: string[] = Array.isArray(initialRawSentences)
+  ? initialRawSentences.filter((s: string) => typeof s === 'string' && s.trim().length > 0)
+  : [];
+const hasMarketingSentences = marketingSentences.length > 0;
+
 const config: Config = {
   id: data.m.id,
   locale: data.locale,
@@ -109,7 +115,7 @@ const config: Config = {
   show_preparation_countdowns: !!data.m.show_preparation_countdowns,
   show_final_rounds: !!data.m.show_final_rounds,
   show_we_are_closing: !!data.m.show_we_are_closing,
-  show_we_are_closed_marketing: !!data.m.show_we_are_closed_marketing,
+  show_we_are_closed_marketing: !!data.m.show_we_are_closed_marketing && hasMarketingSentences,
   show_cancelled_events: !!data.m.show_cancelled_events,
   show_menus: !!data.m.show_menus,
   show_orderslist: !!data.m.show_orderslist,
@@ -294,6 +300,13 @@ function updateData(data: ServerData): void {
 
   if (menuSlide) {
     menuSlide.setMenus(data.menus);
+  }
+
+  if (data.marketing_sentences) {
+    marketingSentences = data.marketing_sentences.filter((s: string) => typeof s === 'string' && s.trim().length > 0);
+    if (marketingAfterSlide) {
+      marketingAfterSlide.setSentences(marketingSentences);
+    }
   }
 
   e = initDataWithStartAndEndDate(data.e) as AdsEvent[];
@@ -788,7 +801,7 @@ function initalizeSlides(): void {
   }
 
   if (config.show_we_are_closed_marketing) {
-    marketingAfterSlide = new MarketingAfter(manager, document.getElementById('thirty-minutes-after') as HTMLDivElement);
+    marketingAfterSlide = new MarketingAfter(manager, document.getElementById('thirty-minutes-after') as HTMLDivElement, marketingSentences);
     manager.registerSlide(marketingAfterSlide, InterruptionSlides.CLOSED);
   }
 

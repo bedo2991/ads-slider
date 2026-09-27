@@ -35,8 +35,29 @@ class Monitor extends Authenticatable
         'show_preparation_countdowns' => 'boolean',
         'last_restarted_at' => 'datetime',
         'last_ping' => 'datetime',
+        'marketing_sentences' => 'array',
         'stats' => AsArrayObject::class,
     ];
+
+    public function getEffectiveMarketingSentences(): array
+    {
+        if (is_array($this->marketing_sentences) && !empty($this->marketing_sentences)) {
+            $filtered = array_values(array_filter($this->marketing_sentences, fn ($s) => is_string($s) && trim($s) !== ''));
+            if (!empty($filtered)) {
+                return $filtered;
+            }
+        }
+
+        $realmSentences = $this->realm?->marketing_sentences;
+        if (is_array($realmSentences) && !empty($realmSentences)) {
+            $filtered = array_values(array_filter($realmSentences, fn ($s) => is_string($s) && trim($s) !== ''));
+            if (!empty($filtered)) {
+                return $filtered;
+            }
+        }
+
+        return [];
+    }
 
     /**
      * @return BelongsTo

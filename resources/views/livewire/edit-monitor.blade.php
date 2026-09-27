@@ -28,6 +28,11 @@
 
                 <x-forms.inputs.checkbox name="form.show_we_are_closed_marketing" label="{{__('Show -we are closed- message')}}"/>
 
+                <x-forms.inputs.textarea name="form.marketing_sentences" rows="6" label="{{__('Marketing sentences (leave empty to use realm standard)')}}">
+                    <x-forms.helpers.help
+                        text="{{__('One sentence per line. If empty, standard sentences from the realm are used. If neither monitor nor realm has sentences configured, this slide will not be displayed.')}}" />
+                </x-forms.inputs.textarea>
+
                 <x-forms.inputs.checkbox name="form.show_event_while_is_happening" label="{{__('Show event while is happening')}}"/>
 
                 <x-forms.inputs.checkbox name="form.show_cancelled_events" label="{{__('Show cancelled events')}}"/>
