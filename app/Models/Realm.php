@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ScheduledSlideType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,7 +18,20 @@ class Realm extends Model
 
     protected $casts = [
         'marketing_sentences' => 'array',
+        'schedule' => 'array',
     ];
+
+    public function getEffectiveSchedule(): array
+    {
+        if (is_array($this->schedule) && ! empty($this->schedule)) {
+            $filtered = array_values(array_filter($this->schedule, fn ($s) => is_string($s) && trim($s) !== ''));
+            if (! empty($filtered)) {
+                return $filtered;
+            }
+        }
+
+        return ScheduledSlideType::defaultSchedule();
+    }
 
     public function removeOrdersPull(): bool
     {

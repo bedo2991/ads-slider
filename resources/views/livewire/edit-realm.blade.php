@@ -69,6 +69,11 @@
                         text="{{__('One sentence per line. These sentences are shown on monitors during the -we are closed- slide, unless overridden by a monitor.')}}" />
                 </x-forms.inputs.textarea>
 
+                <x-forms.inputs.textarea name="form.schedule" rows="8" label="{{__('Standard slide schedule')}}">
+                    <x-forms.helpers.help
+                        text="{{__('One slide type per line. Available types: :types. If empty, the default schedule is used.', ['types' => implode(', ', \App\Enums\ScheduledSlideType::values())])}}" />
+                </x-forms.inputs.textarea>
+
                 <div class="my-3" />
 
                 <x-forms.buttons.primary text="{{ __('Save Realm') }}" />

@@ -33,6 +33,11 @@
                         text="{{__('One sentence per line. If empty, standard sentences from the realm are used. If neither monitor nor realm has sentences configured, this slide will not be displayed.')}}" />
                 </x-forms.inputs.textarea>
 
+                <x-forms.inputs.textarea name="form.schedule" rows="8" label="{{__('Slide Schedule (leave empty to use realm schedule)')}}">
+                    <x-forms.helpers.help
+                        text="{{__('One slide type per line. Available types: :types. If empty, the schedule from the realm is used.', ['types' => implode(', ', \App\Enums\ScheduledSlideType::values())])}}" />
+                </x-forms.inputs.textarea>
+
                 <x-forms.inputs.checkbox name="form.show_event_while_is_happening" label="{{__('Show event while is happening')}}"/>
 
                 <x-forms.inputs.checkbox name="form.show_cancelled_events" label="{{__('Show cancelled events')}}"/>

@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Forms;
 
+use App\Enums\ScheduledSlideType;
 use App\Livewire\Traits\ErrorBanner;
 use App\Models\Realm;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -47,6 +49,9 @@ class RealmForm extends Form
     #[Validate('nullable|string')]
     public $marketing_sentences = '';
 
+    #[Validate('nullable|string')]
+    public $schedule = '';
+
     public function saveRealm()
     {
         $validated = $this->validate();
@@ -61,6 +66,26 @@ class RealmForm extends Form
             $validated['marketing_sentences'] = ! empty($lines) ? $lines : null;
         } else {
             $validated['marketing_sentences'] = null;
+        }
+
+        if ($this->schedule) {
+            $scheduleItems = ScheduledSlideType::parseSchedule($this->schedule);
+            if (! empty($scheduleItems)) {
+                $invalid = ScheduledSlideType::validateSchedule($scheduleItems);
+                if (! empty($invalid)) {
+                    throw ValidationException::withMessages([
+                        'form.schedule' => __('Invalid slide type(s): :types. Valid types are: :valid', [
+                            'types' => implode(', ', $invalid),
+                            'valid' => implode(', ', ScheduledSlideType::values()),
+                        ]),
+                    ]);
+                }
+                $validated['schedule'] = $scheduleItems;
+            } else {
+                $validated['schedule'] = null;
+            }
+        } else {
+            $validated['schedule'] = null;
         }
 
         if (! $this->realm) {
@@ -88,5 +113,6 @@ class RealmForm extends Form
         $this->orders_link = $realm->orders_link;
         $this->orders_polling_frequency = $realm->orders_polling_frequency ?? 60; // default to 60 seconds
         $this->marketing_sentences = is_array($realm->marketing_sentences) ? implode("\n", $realm->marketing_sentences) : '';
+        $this->schedule = is_array($realm->schedule) ? implode("\n", $realm->schedule) : '';
     }
 }

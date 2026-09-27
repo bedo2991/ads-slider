@@ -3,15 +3,17 @@ import { Config } from './types.js';
 import { Mediator } from './patterns/Mediator.js';
 import { Sema } from 'async-sema';
 
-export enum ScheduledSlideType {
-    EVENTS = "EVENTS",
-    PICS = "PICS",
-    VIDEOS = "VIDEOS",
-    WEATHER = "WEATHER",
-    MENUS = "MENUS",
-    KARAOKE = "KARAOKE",
-    ORDERSLIST = "ORDERSLIST",
-}
+export const ScheduledSlideType = {
+    EVENTS: "EVENTS",
+    PICS: "PICS",
+    VIDEOS: "VIDEOS",
+    WEATHER: "WEATHER",
+    MENUS: "MENUS",
+    KARAOKE: "KARAOKE",
+    ORDERSLIST: "ORDERSLIST",
+} as const;
+
+export type ScheduledSlideType = (typeof ScheduledSlideType)[keyof typeof ScheduledSlideType] | string;
 
 export enum InterruptionSlides {
     HAPPY_HOUR = "HAPPY_HOUR",
@@ -45,8 +47,8 @@ export class Manager implements Mediator {
     private scheduleIndex = 0;
     private clock: HTMLDivElement;
 
-    private schedule: ScheduledSlideType[] =
-        [ScheduledSlideType.WEATHER,
+    private rawSchedule: ScheduledSlideType[] = [
+        ScheduledSlideType.WEATHER,
         ScheduledSlideType.ORDERSLIST,
         ScheduledSlideType.EVENTS,
         ScheduledSlideType.ORDERSLIST,
@@ -60,8 +62,9 @@ export class Manager implements Mediator {
         ScheduledSlideType.MENUS,
         ScheduledSlideType.PICS,
         ScheduledSlideType.ORDERSLIST,
-            //ScheduledSlideType.KARAOKE,
-        ];
+    ];
+
+    private schedule: ScheduledSlideType[] = [...this.rawSchedule];
 
     private constructor() {
         // use Manager.Instance to use this class
@@ -164,28 +167,54 @@ export class Manager implements Mediator {
 
     init(monitorConfig: Config) {
         this.conf = monitorConfig;
-        if (!monitorConfig.show_weather_forecast) {
-            this.schedule = this.schedule.filter(slide => slide !== ScheduledSlideType.WEATHER);
+        if (monitorConfig.schedule && Array.isArray(monitorConfig.schedule) && monitorConfig.schedule.length > 0) {
+            this.rawSchedule = [...monitorConfig.schedule];
         }
+        this.filterSchedule();
+    }
 
-        if (!monitorConfig.show_menus) {
-            this.schedule = this.schedule.filter(slide => slide !== ScheduledSlideType.MENUS);
+    public setSchedule(newSchedule: ScheduledSlideType[]) {
+        if (!Array.isArray(newSchedule) || newSchedule.length === 0) {
+            return;
         }
+        this.rawSchedule = [...newSchedule];
+        this.filterSchedule();
+    }
 
-        if (!monitorConfig.show_pictures) {
-            this.schedule = this.schedule.filter(slide => slide !== ScheduledSlideType.PICS);
+    public getSchedule(): ScheduledSlideType[] {
+        return [...this.schedule];
+    }
+
+    private filterSchedule() {
+        let filtered = [...this.rawSchedule];
+        if (this.conf) {
+            if (!this.conf.show_weather_forecast) {
+                filtered = filtered.filter(slide => slide !== ScheduledSlideType.WEATHER);
+            }
+
+            if (!this.conf.show_menus) {
+                filtered = filtered.filter(slide => slide !== ScheduledSlideType.MENUS);
+            }
+
+            if (!this.conf.show_pictures) {
+                filtered = filtered.filter(slide => slide !== ScheduledSlideType.PICS);
+            }
+
+            if (!this.conf.show_videos) {
+                filtered = filtered.filter(slide => slide !== ScheduledSlideType.VIDEOS);
+            }
+
+            if (!this.conf.show_karaoke) {
+                filtered = filtered.filter(slide => slide !== ScheduledSlideType.KARAOKE);
+            }
+
+            if (!this.conf.show_orderslist) {
+                filtered = filtered.filter(slide => slide !== ScheduledSlideType.ORDERSLIST);
+            }
         }
-
-        if (!monitorConfig.show_videos) {
-            this.schedule = this.schedule.filter(slide => slide !== ScheduledSlideType.VIDEOS);
-        }
-
-        if (!monitorConfig.show_karaoke) {
-            this.schedule = this.schedule.filter(slide => slide !== ScheduledSlideType.KARAOKE);
-        }
-
-        if (!monitorConfig.show_orderslist) {
-            this.schedule = this.schedule.filter(slide => slide !== ScheduledSlideType.ORDERSLIST);
+        this.schedule = filtered;
+        if (this.schedule.length > 0 && this.scheduleIndex >= this.schedule.length) {
+            this.scheduleIndex = 0;
         }
     }
 
@@ -267,6 +296,9 @@ export class Manager implements Mediator {
     }
 
     nextSchedule() {
+        if (this.schedule.length === 0) {
+            return;
+        }
         //const oldIndex = this.scheduleIndex;
         this.scheduleIndex = (this.scheduleIndex + 1) % this.schedule.length;
         console.debug(`Schedule index increased to ${this.scheduleIndex}`);
@@ -288,10 +320,14 @@ export class Manager implements Mediator {
     }
 
     startScheduledSlide(attempt = 0) {
+        if (this.schedule.length === 0) {
+            console.warn('[Manager] Schedule is empty.');
+            return;
+        }
         const slide = this.slides.get(this.getCurrentScheduleType());
         if (!slide) {
             console.warn(`[Manager] Slide for type "${this.getCurrentScheduleType()}" not found`);
-            if (attempt < 10) {
+            if (attempt < 10 && attempt < this.schedule.length) {
                 this.nextSchedule();
                 this.startScheduledSlide(attempt + 1);
                 return;
@@ -311,6 +347,9 @@ export class Manager implements Mediator {
      * @param type 
      */
     skipScheduleTo(type: ScheduledSlideType) {
+        if (this.schedule.length === 0) {
+            return;
+        }
         this.scheduleIndex = this.schedule.indexOf(type);
         if (this.scheduleIndex < 0) {
             console.error('[Manager] requested schedule not found');

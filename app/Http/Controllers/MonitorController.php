@@ -301,6 +301,10 @@ class MonitorController extends Controller
         if (empty($effectiveMarketingSentences)) {
             $data['m']['show_we_are_closed_marketing'] = false;
         }
+
+        $effectiveSchedule = $monitor->getEffectiveSchedule();
+        $data['schedule'] = $effectiveSchedule;
+        $data['m']['schedule'] = $effectiveSchedule;
         $data['e'] = EventController::getScheduledEvents($monitor->realm_id)->with(['menus:id,path', 'happy_hour'])->get()->sortBy(function ($event) {
             return [
                 $event->real_start_date,

@@ -2,10 +2,12 @@
 
 namespace App\Livewire\Forms;
 
+use App\Enums\ScheduledSlideType;
 use App\Livewire\Traits\ErrorBanner;
 use App\Models\Monitor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
@@ -72,6 +74,9 @@ class MonitorForm extends Form
     #[Validate('nullable|string')]
     public $marketing_sentences = '';
 
+    #[Validate('nullable|string')]
+    public $schedule = '';
+
     public function saveMonitor()
     {
         $validated = $this->validate();
@@ -94,6 +99,26 @@ class MonitorForm extends Form
             $validated['marketing_sentences'] = null;
         }
 
+        if ($this->schedule) {
+            $scheduleItems = ScheduledSlideType::parseSchedule($this->schedule);
+            if (! empty($scheduleItems)) {
+                $invalid = ScheduledSlideType::validateSchedule($scheduleItems);
+                if (! empty($invalid)) {
+                    throw ValidationException::withMessages([
+                        'form.schedule' => __('Invalid slide type(s): :types. Valid types are: :valid', [
+                            'types' => implode(', ', $invalid),
+                            'valid' => implode(', ', ScheduledSlideType::values()),
+                        ]),
+                    ]);
+                }
+                $validated['schedule'] = $scheduleItems;
+            } else {
+                $validated['schedule'] = null;
+            }
+        } else {
+            $validated['schedule'] = null;
+        }
+
         $this->monitor->fill($validated);
         $this->monitor->user_id = Auth::id();
         $this->monitor->save();
@@ -112,6 +137,7 @@ class MonitorForm extends Form
         $this->show_we_are_closing = (bool) $m->show_we_are_closing;
         $this->show_we_are_closed_marketing = (bool) $m->show_we_are_closed_marketing;
         $this->marketing_sentences = is_array($m->marketing_sentences) ? implode("\n", $m->marketing_sentences) : '';
+        $this->schedule = is_array($m->schedule) ? implode("\n", $m->schedule) : '';
         $this->show_cancelled_events = (bool) $m->show_cancelled_events;
         $this->show_menus = (bool) $m->show_menus;
         $this->show_happy_hours = (bool) $m->show_happy_hours;

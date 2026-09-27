@@ -127,6 +127,7 @@ const config: Config = {
   use_animations: !!data.m.use_animations,
   show_marquee: false, // currently disabled !!data.m.show_marquee,
   show_event_while_is_happening: !!data.m.show_event_while_is_happening,
+  schedule: data.schedule ?? data.m.schedule ?? null,
   api_token: data.m.api_token,
   realm_id: data.m.realm_id,
   channel_hash: data.m.channel_hash ?? '',
@@ -307,6 +308,10 @@ function updateData(data: ServerData): void {
     if (marketingAfterSlide) {
       marketingAfterSlide.setSentences(marketingSentences);
     }
+  }
+
+  if (data.schedule && Array.isArray(data.schedule)) {
+    manager.setSchedule(data.schedule);
   }
 
   e = initDataWithStartAndEndDate(data.e) as AdsEvent[];

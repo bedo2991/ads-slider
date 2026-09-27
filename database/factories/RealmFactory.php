@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ScheduledSlideType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RealmFactory extends Factory
@@ -19,6 +20,7 @@ class RealmFactory extends Factory
                 'Lust hinter der Theke zu stehen? Komm zur Versammlung vorbei!',
                 'Would you like to try working behind the bar? Visit us during our weekly meeting!',
             ],
+            'schedule' => ScheduledSlideType::defaultSchedule(),
             'created_at' => now(),
             'updated_at' => now(),
         ];

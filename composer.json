@@ -55,6 +55,7 @@
         "ext-pdo_sqlite": "*",
         "fakerphp/faker": "^1.23",
         "kkomelin/laravel-translatable-string-exporter": "^1.22",
+        "laravel/pail": "^1.2",
         "laravel/pint": "^1.14",
         "laravel/sail": "^1.41",
         "laravel/telescope": "^5.0",

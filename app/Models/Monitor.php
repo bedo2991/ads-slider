@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ScheduledSlideType;
 use App\Traits\RealmTrait;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,22 +37,43 @@ class Monitor extends Authenticatable
         'last_restarted_at' => 'datetime',
         'last_ping' => 'datetime',
         'marketing_sentences' => 'array',
+        'schedule' => 'array',
         'stats' => AsArrayObject::class,
     ];
 
+    public function getEffectiveSchedule(): array
+    {
+        if (is_array($this->schedule) && ! empty($this->schedule)) {
+            $filtered = array_values(array_filter($this->schedule, fn ($s) => is_string($s) && trim($s) !== ''));
+            if (! empty($filtered)) {
+                return $filtered;
+            }
+        }
+
+        $realmSchedule = $this->realm?->schedule;
+        if (is_array($realmSchedule) && ! empty($realmSchedule)) {
+            $filtered = array_values(array_filter($realmSchedule, fn ($s) => is_string($s) && trim($s) !== ''));
+            if (! empty($filtered)) {
+                return $filtered;
+            }
+        }
+
+        return ScheduledSlideType::defaultSchedule();
+    }
+
     public function getEffectiveMarketingSentences(): array
     {
-        if (is_array($this->marketing_sentences) && !empty($this->marketing_sentences)) {
+        if (is_array($this->marketing_sentences) && ! empty($this->marketing_sentences)) {
             $filtered = array_values(array_filter($this->marketing_sentences, fn ($s) => is_string($s) && trim($s) !== ''));
-            if (!empty($filtered)) {
+            if (! empty($filtered)) {
                 return $filtered;
             }
         }
 
         $realmSentences = $this->realm?->marketing_sentences;
-        if (is_array($realmSentences) && !empty($realmSentences)) {
+        if (is_array($realmSentences) && ! empty($realmSentences)) {
             $filtered = array_values(array_filter($realmSentences, fn ($s) => is_string($s) && trim($s) !== ''));
-            if (!empty($filtered)) {
+            if (! empty($filtered)) {
                 return $filtered;
             }
         }

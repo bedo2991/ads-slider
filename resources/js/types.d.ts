@@ -62,6 +62,7 @@ export interface Monitor {
   show_marquee: boolean;
   show_event_while_is_happening: boolean;
   marketing_sentences?: string[] | null;
+  schedule?: string[] | null;
   realm_id: number;
   api_token: string;
   channel_hash?: string;
@@ -205,6 +206,7 @@ export interface ServerData {
   ol: OrderslistData;
   weather: WeatherData;
   marketing_sentences?: string[];
+  schedule?: string[];
 }
 
 export interface OrderslistItem {
