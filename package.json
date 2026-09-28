@@ -10,7 +10,7 @@
         "@eslint/eslintrc": "^3.3.1",
         "@eslint/js": "^9.28.0",
         "@popperjs/core": "^2.11.6",
-        "@types/jquery": "^3.5.27",
+        "@types/jquery": "^4.0.1",
         "@typescript-eslint/eslint-plugin": "^8.33.1",
         "@typescript-eslint/parser": "^8.33.1",
         "axios": "^1.6.2",
@@ -39,7 +39,7 @@
         "async-sema": "^3.1.1",
         "dayjs": "^1.11.10",
         "esformatter-add-trailing-commas": "^1.1.0",
-        "jquery": "^3.7.1",
+        "jquery": "^4.0.0",
         "qrcode": "^1.5.3"
     }
 }
