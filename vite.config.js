@@ -15,7 +15,7 @@ export default defineConfig({
     laravel({
       input: [
         'resources/sass/app.scss',
-        'resources/js/app.js',
+        'resources/js/app.mjs',
         'resources/js/slider.ts'],
       refresh: true,
       assets: [

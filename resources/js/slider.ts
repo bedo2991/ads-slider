@@ -28,7 +28,7 @@ import Filter from './modules/filters.js';
 import $ from 'jquery';
 import _ from './localization.js';
 import '../sass/slider.scss';
-import './bootstrap.js';
+import './bootstrap.mjs';
 import type { Config, PictureSlide, VideoSlide, AdsEvent, InitialServerData, Menu, ElementWithRealStartDate, ServerData, WeatherData, OrderslistData } from './types.js';
 import QR from 'qrcode';
 import isSameOrAfter from 'dayjs/esm/plugin/isSameOrAfter/index.js';

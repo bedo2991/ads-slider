@@ -15,7 +15,7 @@
     </title>
 
     <!-- Styles -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.mjs'])
     <script>
         /*!
          * Color mode toggler for Bootstrap's docs (https://getbootstrap.com/)
