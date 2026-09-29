@@ -22,7 +22,7 @@
     font-weight: 400;
     font-display: swap;
     src: url('/resources/assets/fonts/FiraSans/FiraSans-Regular.woff2') format('woff2'),
-         url('/resources/assets/fonts/FiraSans/FiraSans-Regular.woff') format('woff');
+        url('/resources/assets/fonts/FiraSans/FiraSans-Regular.woff') format('woff');
 }
 
 @font-face {
@@ -31,7 +31,7 @@
     font-weight: 600;
     font-display: swap;
     src: url('/resources/assets/fonts/FiraSans/FiraSans-SemiBold.woff2') format('woff2'),
-         url('/resources/assets/fonts/FiraSans/FiraSans-SemiBold.woff') format('woff');
+        url('/resources/assets/fonts/FiraSans/FiraSans-SemiBold.woff') format('woff');
 }
 
 @font-face {
@@ -40,7 +40,7 @@
     font-weight: 700;
     font-display: swap;
     src: url('/resources/assets/fonts/FiraSans/FiraSans-Bold.woff2') format('woff2'),
-         url('/resources/assets/fonts/FiraSans/FiraSans-Bold.woff') format('woff');
+        url('/resources/assets/fonts/FiraSans/FiraSans-Bold.woff') format('woff');
 }
 
 @font-face {
@@ -49,7 +49,7 @@
     font-weight: 400;
     font-display: swap;
     src: url('/resources/assets/fonts/FiraSans/FiraSans-Italic.woff2') format('woff2'),
-         url('/resources/assets/fonts/FiraSans/FiraSans-Italic.woff') format('woff');
+        url('/resources/assets/fonts/FiraSans/FiraSans-Italic.woff') format('woff');
 }
 
 @font-face {
@@ -58,7 +58,7 @@
     font-weight: 700;
     font-display: swap;
     src: url('/resources/assets/fonts/FiraSans/FiraSans-BoldItalic.woff2') format('woff2'),
-         url('/resources/assets/fonts/FiraSans/FiraSans-BoldItalic.woff') format('woff');
+        url('/resources/assets/fonts/FiraSans/FiraSans-BoldItalic.woff') format('woff');
 }
 
 html,
@@ -311,6 +311,7 @@ div.fatal-error {
     margin-left: -55vh;
     bottom: 4vh;
     overflow: hidden;
+    font-variant-numeric: tabular-nums;
 }
 
 /*Final 15 minutes*/
@@ -384,6 +385,7 @@ div.fatal-error {
     position: absolute;
     right: 0;
     z-index: 51;
+    font-variant-numeric: tabular-nums;
 }
 
 /*Marquee bar*/
@@ -662,6 +664,7 @@ div#pics-container {
 .time {
     text-align: right;
     padding-right: 1vh;
+    font-variant-numeric: tabular-nums;
 }
 
 .weatherIcon img {
@@ -673,6 +676,7 @@ div#pics-container {
     padding-right: 2vh;
     white-space: nowrap;
     overflow: hidden;
+    font-variant-numeric: tabular-nums;
 }
 
 .weatherDescr {
@@ -683,6 +687,7 @@ div#pics-container {
 .weatherCloud {
     text-align: center;
     padding-right: 2vh;
+    font-variant-numeric: tabular-nums;
 }
 
 
