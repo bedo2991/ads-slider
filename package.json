@@ -6,13 +6,16 @@
         "dev": "vite",
         "build": "vite build"
     },
+    "overrides": {
+        "minimatch": "^11.0.1"
+    },
     "devDependencies": {
         "@eslint/eslintrc": "^3.3.1",
         "@eslint/js": "^9.28.0",
         "@popperjs/core": "^2.11.6",
         "@types/jquery": "^3.5.27",
-        "@typescript-eslint/eslint-plugin": "^6.15.0",
-        "@typescript-eslint/parser": "^6.15.0",
+        "@typescript-eslint/eslint-plugin": "^8.72.1",
+        "@typescript-eslint/parser": "^8.72.1",
         "axios": "^1.6.2",
         "bootstrap": "^5.3.6",
         "concurrently": "^9.0.1",
