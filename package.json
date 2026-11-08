@@ -18,7 +18,7 @@
         "@typescript-eslint/parser": "^8.72.1",
         "axios": "^1.6.2",
         "bootstrap": "^5.3.6",
-        "concurrently": "^9.0.1",
+        "concurrently": "^10.0.6",
         "eslint": "^9.28.0",
         "eslint-plugin-import": "^2.29.0",
         "globals": "^17.12.0",
