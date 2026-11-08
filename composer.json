@@ -48,7 +48,7 @@
         "pusher/pusher-php-server": "^7.2",
         "resend/resend-php": "^0.18.0",
         "symfony/http-client": "^7.0",
-        "symfony/mailgun-mailer": "^7.0",
+        "symfony/mailgun-mailer": "^8.1",
         "ycs77/laravel-form-builder-bs4": "^1.0"
     },
     "require-dev": {
